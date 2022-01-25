@@ -14,6 +14,7 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:clickable="true"
-        android:text="Por defecto"/>
+        android:text="@string/defecto"
+        android:focusable="true" />
 
 </LinearLayout>
