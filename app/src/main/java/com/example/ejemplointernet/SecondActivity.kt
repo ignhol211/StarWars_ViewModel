@@ -35,7 +35,6 @@ class SecondActivity : AppCompatActivity() {
 
         val initialData = intent.getStringExtra(URL)
 
-        //binding.tvTexto.text = initialData.
 
         binding.buttonDescargar.setOnClickListener(){
 
