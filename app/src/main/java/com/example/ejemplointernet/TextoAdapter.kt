@@ -1,6 +1,7 @@
 package com.example.ejemplointernet
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
@@ -19,13 +20,12 @@ class TextoAdapter(var listaPlanetas: List<Planeta>) : RecyclerView.Adapter <Tex
 
     override fun onBindViewHolder(holder: TextoViewHolder, position: Int) {
         holder.itemBinding.tvNombrePlaneta.text = listaPlanetas[position].name
+
         holder.itemBinding.tvNombrePlaneta.setOnClickListener(){
-            /*
-            val intent = Intent (, TextoAdapter::class.java)
+
+            val intent = Intent (holder.itemBinding.root.context, SecondActivity::class.java)
             intent.putExtra("url",listaPlanetas[position].url)
-            startActivity(intent)
-            todo
-             */
+            holder.itemBinding.root.context.startActivity(intent)
         }
     }
 
