@@ -1,13 +1,10 @@
 package com.example.ejemplointernet
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ejemplointernet.databinding.ItemPlanetaBinding
-import java.security.AccessController.getContext
 
 class TextoAdapter(var listaPlanetas: List<Planeta>) : RecyclerView.Adapter <TextoAdapter.TextoViewHolder>() {
 

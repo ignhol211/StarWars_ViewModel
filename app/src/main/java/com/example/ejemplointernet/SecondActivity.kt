@@ -3,7 +3,6 @@ package com.example.ejemplointernet
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ejemplointernet.databinding.ActivitySecondBinding
@@ -35,7 +34,6 @@ class SecondActivity : AppCompatActivity() {
 
         val initialData = intent.getStringExtra(URL)
 
-
         binding.buttonDescargar.setOnClickListener(){
 
             val client = OkHttpClient()
@@ -51,7 +49,6 @@ class SecondActivity : AppCompatActivity() {
                     CoroutineScope(Dispatchers.Main).launch {
                         Toast.makeText(this@SecondActivity, "Algo ha ido mal", Toast.LENGTH_SHORT).show()
                     }
-
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -63,9 +60,10 @@ class SecondActivity : AppCompatActivity() {
 
                         val planeta = gson.fromJson(body, Planeta::class.java)
 
-
                         CoroutineScope(Dispatchers.Main).launch {
-                            binding.tvTexto.text = planeta.name
+                            binding.tvNombre.text = planeta.name
+                            binding.tvPoblacion.text = planeta.population
+                            binding.tvClima.text = planeta.climate
                             Toast.makeText(this@SecondActivity, planeta.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }

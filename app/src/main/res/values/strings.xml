@@ -3,4 +3,7 @@
     <string name="encabezado">Descarga un planeta</string>
     <string name="defecto">Por defecto</string>
     <string name="descargar">Descargar</string>
+    <string name="planeta_nombre">Aquí te aparecerá el nombre</string>
+    <string name="planeta_poblacion">Aquí te aparecerá la población</string>
+    <string name="planeta_clima">Aquí te aparecerá el clima</string>
 </resources>
