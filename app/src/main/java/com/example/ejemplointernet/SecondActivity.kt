@@ -1,29 +1,17 @@
 package com.example.ejemplointernet
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ejemplointernet.databinding.ActivitySecondBinding
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.*
-import java.io.IOException
 
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
+    private val viewModel : SecondActivityViewModel by viewModels()
 
     companion object{
         const val URL = "url"
-
-        fun launch(context: Context,url:String){
-            val intent = Intent (context,SecondActivity::class.java)
-            intent.putExtra(URL,url)
-            context.startActivity(intent)
-        }
 
     }
 
@@ -34,44 +22,33 @@ class SecondActivity : AppCompatActivity() {
 
         val initialData = intent.getStringExtra(URL)
 
+        initObserver()
+
         binding.buttonDescargar.setOnClickListener(){
-
-            val client = OkHttpClient()
-
-            val request = Request.Builder()
-            request.url(initialData.toString())
-
-
-            val call = client.newCall(request.build())
-            call.enqueue( object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    println(e.toString())
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(this@SecondActivity, "Algo ha ido mal", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    println(response.toString())
-                    response.body?.let { responseBody ->
-                        val body = responseBody.string()
-                        println(body)
-                        val gson = Gson()
-
-                        val planeta = gson.fromJson(body, Planeta::class.java)
-
-                        CoroutineScope(Dispatchers.Main).launch {
-                            binding.tvNombre.text = planeta.name
-                            binding.tvPoblacion.text = planeta.population
-                            binding.tvClima.text = planeta.climate
-                            Toast.makeText(this@SecondActivity, planeta.toString(), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            })
-
+            initialData?.let{viewModel.getPlanet(initialData)}
         }
 
+    }
+
+    private fun initObserver() {
+        viewModel.isVisible.observe(this){isVisible ->
+            if(isVisible) setVisible() else setGone()
+
+        }
+        viewModel.responsePlaneta.observe(this){ planeta ->
+            binding.tvNombre.text = planeta.name
+            binding.tvPoblacion.text = planeta.population
+            binding.tvClima.text = planeta.climate
+        }
+
+    }
+
+    private fun setVisible() {
+        binding.buttonDescargar.visibility = View.VISIBLE
+    }
+
+    private fun setGone() {
+        binding.buttonDescargar.visibility = View.GONE
     }
 
 }

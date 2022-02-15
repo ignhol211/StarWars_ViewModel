@@ -29,6 +29,4 @@ class TextoAdapter(var listaPlanetas: List<Planeta>) : RecyclerView.Adapter <Tex
     override fun getItemCount(): Int {
         return listaPlanetas.size
     }
-
-
 }
