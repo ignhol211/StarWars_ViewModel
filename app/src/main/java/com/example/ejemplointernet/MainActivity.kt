@@ -1,10 +1,13 @@
 package com.example.ejemplointernet
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ejemplointernet.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,5 +32,26 @@ class MainActivity : AppCompatActivity() {
             adapter = TextoAdapter(planetaResponse.results)
             binding.recyclerView.adapter = adapter
         }
+
+        viewModel.isVisible.observe(this) { isVisible ->
+            if (isVisible) setVisible() else setGone()
+        }
+
+        viewModel.responseText.observe(this){responseText ->
+            showSnackbar(responseText)
+        }
+    }
+
+    private fun setVisible(){
+        binding.pbDownloading.visibility = View.VISIBLE
+    }
+
+    private fun setGone(){
+        binding.pbDownloading.visibility = View.INVISIBLE
+    }
+
+    private fun showSnackbar(text : String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT).show()
     }
 }
+

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ejemplointernet.databinding.ActivitySecondBinding
+import com.google.android.material.snackbar.Snackbar
 
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
@@ -25,7 +26,9 @@ class SecondActivity : AppCompatActivity() {
         initObserver()
 
         binding.buttonDescargar.setOnClickListener(){
-            initialData?.let{viewModel.getPlanet(initialData)}
+            initialData?.let{
+                viewModel.getPlanet(initialData)
+            }
         }
 
     }
@@ -41,14 +44,22 @@ class SecondActivity : AppCompatActivity() {
             binding.tvClima.text = planeta.climate
         }
 
+        viewModel.responseText.observe(this) { responseText ->
+            showSnackbar(responseText)
+        }
+
+    }
+
+    private fun showSnackbar(text : String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun setVisible() {
-        binding.buttonDescargar.visibility = View.VISIBLE
+        binding.pbDownloading.visibility = View.VISIBLE
     }
 
     private fun setGone() {
-        binding.buttonDescargar.visibility = View.GONE
+        binding.pbDownloading.visibility = View.GONE
     }
 
 }

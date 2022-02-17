@@ -19,12 +19,20 @@ class SecondActivityViewModel  : ViewModel() {
     val responsePlaneta : LiveData<Planeta>
         get() = _responsePlaneta
 
+    private val _responseText by lazy { MediatorLiveData<String>() }
+    val responseText : LiveData<String>
+        get() = _responseText
+
     suspend fun setIsVisibleInMainThread(value : Boolean) = withContext(Dispatchers.Main){
         _isVisible.value = value
     }
 
     suspend fun setResponseTextInMainThread(planeta: Planeta) = withContext(Dispatchers.Main){
         _responsePlaneta.value = planeta
+    }
+
+    suspend fun setResponseTextInMainThread(value : String) = withContext(Dispatchers.Main){
+        _responseText.value = value
     }
 
     fun getPlanet(initialData: String) {
@@ -44,6 +52,7 @@ class SecondActivityViewModel  : ViewModel() {
                         println(e.toString())
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(2000)
+                            setResponseTextInMainThread("Algo ha ido mal")
                             setIsVisibleInMainThread(false)
                         }
                     }
@@ -58,7 +67,9 @@ class SecondActivityViewModel  : ViewModel() {
                             val planeta = gson.fromJson(body, Planeta::class.java)
 
                             CoroutineScope(Dispatchers.Main).launch {
+                                delay(2000)
                                 setResponseTextInMainThread(planeta)
+                                setIsVisibleInMainThread(false)
                             }
                         }
                     }

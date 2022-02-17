@@ -4,18 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import okhttp3.*
 import java.io.IOException
-
 class MainActivityViewModel : ViewModel() {
 
     private val _isVisible by lazy { MediatorLiveData<Boolean>() }
+    val isVisible : LiveData<Boolean>
+        get() = _isVisible
 
     private val _responsePlaneta by lazy { MediatorLiveData<PlanetaResponse>() }
     val responsePlaneta : LiveData<PlanetaResponse>
         get() = _responsePlaneta
+
+    private val _responseText by lazy { MediatorLiveData<String>() }
+    val responseText : LiveData<String>
+        get() = _responseText
 
     suspend fun setIsVisibleInMainThread(value : Boolean) = withContext(Dispatchers.Main){
         _isVisible.value = value
@@ -23,6 +29,10 @@ class MainActivityViewModel : ViewModel() {
 
     suspend fun setResponsePlanetaInMainThread(planetaResponse: PlanetaResponse) = withContext(Dispatchers.Main){
         _responsePlaneta.value = planetaResponse
+    }
+
+    suspend fun setResponseTextInMainThread(value : String) = withContext(Dispatchers.Main){
+        _responseText.value = value
     }
 
     fun getAllPlanets() {
@@ -43,6 +53,7 @@ class MainActivityViewModel : ViewModel() {
                         println(e.toString())
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(2000)
+                            setResponseTextInMainThread("Algo ha ido mal")
                             setIsVisibleInMainThread(false)
                         }
 
@@ -62,8 +73,8 @@ class MainActivityViewModel : ViewModel() {
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 delay(2000)
-                                setIsVisibleInMainThread(false)
                                 setResponsePlanetaInMainThread(planetaResponse)
+                                setIsVisibleInMainThread(false)
                             }
                         }
                     }
